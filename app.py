@@ -3,22 +3,19 @@ import chromadb
 from chromadb.utils import embedding_functions
 import pymongo
 import os
-from dotenv import load_dotenv
 import openai
 import pandas as pd
 import json
 import ssl
 import datetime
 
-load_dotenv()
-
 # Initialize OpenAI
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # Initialize ChromaDB
 client = chromadb.PersistentClient(path="./chroma_db")
 openai_ef = embedding_functions.OpenAIEmbeddingFunction(
-    api_key=os.getenv("OPENAI_API_KEY"),
+    api_key=st.secrets["OPENAI_API_KEY"],
     model_name="text-embedding-ada-002"
 )
 
@@ -27,7 +24,7 @@ def get_mongo_client():
     try:
         # Configure MongoDB client for Atlas cluster
         client = pymongo.MongoClient(
-            os.getenv("MONGODB_URI"),
+            st.secrets["MONGODB_URI"],
             tls=True,
             tlsAllowInvalidCertificates=True,
             serverSelectionTimeoutMS=5000,

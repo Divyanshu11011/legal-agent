@@ -1,11 +1,8 @@
 import pymongo
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
+import streamlit as st
 
 def setup_mongodb():
-    client = pymongo.MongoClient(os.getenv("MONGODB_URI"))
+    client = pymongo.MongoClient(st.secrets["MONGODB_URI"])
     db = client.legal_documents
     
     # Create collections if they don't exist

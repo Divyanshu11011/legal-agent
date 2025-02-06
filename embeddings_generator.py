@@ -2,9 +2,7 @@ import os
 import chromadb
 from chromadb.utils import embedding_functions
 from PyPDF2 import PdfReader
-from dotenv import load_dotenv
-
-load_dotenv()
+import streamlit as st
 
 def extract_text_from_pdf(file_path):
     try:
@@ -37,7 +35,7 @@ def create_embeddings():
     
     # Use OpenAI embeddings with text-embedding-ada-002 model (1536 dimensions)
     openai_ef = embedding_functions.OpenAIEmbeddingFunction(
-        api_key=os.getenv("OPENAI_API_KEY"),
+        api_key=st.secrets["OPENAI_API_KEY"],
         model_name="text-embedding-ada-002"
     )
     
