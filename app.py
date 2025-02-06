@@ -1,4 +1,10 @@
 import streamlit as st
+import sys
+import sqlite3
+
+__import__('pysqlite3')
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 import chromadb
 from chromadb.utils import embedding_functions
 import pymongo
