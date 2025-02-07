@@ -65,15 +65,13 @@ def analyze_intent(query):
     
     Respond with exactly one of these strings: "MSA", "NDA", or "BOTH"."""
     
-    response = openai.chat.completions.create(
+    response = openai.Completion.create(
         model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": query}
-        ],
-        temperature=0
+        prompt=system_prompt + "\n\nQuery: " + query,
+        temperature=0,
+        max_tokens=10
     )
-    return response.choices[0].message.content
+    return response.choices[0].text.strip()
 
 def extract_key_terms(text, doc_type):
     system_prompt = ""
@@ -295,16 +293,13 @@ def check_prompt_safety(query):
     Query to evaluate:"""
     
     try:
-        response = openai.chat.completions.create(
+        response = openai.Completion.create(
             model="gpt-4-0125-preview",
-            messages=[
-                {"role": "system", "content": safety_prompt},
-                {"role": "user", "content": query}
-            ],
+            prompt=safety_prompt + "\n" + query,
             temperature=0,
             max_tokens=10
         )
-        return response.choices[0].message.content.strip() == "SAFE"
+        return response.choices[0].text.strip() == "SAFE"
     except Exception as e:
         st.error(f"Safety check failed: {str(e)}")
         return False
