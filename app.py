@@ -117,20 +117,17 @@ def extract_key_terms(text, doc_type):
         }"""
 
     try:
-        # First attempt to get a valid JSON response
-        response = openai.chat.completions.create(
+        response = openai.ChatCompletion.create(
             model="gpt-4-0125-preview",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": text}
             ],
             temperature=0.3,
-            max_tokens=2000,
-            presence_penalty=0.0,
-            frequency_penalty=0.0
+            max_tokens=2000
         )
         
-        content = response.choices[0].message.content.strip()
+        content = response.choices[0].message['content'].strip()
         
         # Try to find JSON content if there's any extra text
         if not content.startswith('{'):
